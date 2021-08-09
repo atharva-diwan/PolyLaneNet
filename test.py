@@ -20,7 +20,7 @@ def test(model, test_loader, evaluator, exp_root, cfg, view, epoch, max_batches=
 
     # Test the model
     if epoch > 0:
-        model.load_state_dict(torch.load(os.path.join(exp_root, "models", "model_{:03d}.pt".format(epoch)))['model'])
+        model.load_state_dict(torch.load(os.path.join(exp_root, "models", "model_{:03d}.pt".format(epoch)), map_location=torch.device('cpu'))['model'])
 
     model.eval()
     criterion_parameters = cfg.get_loss_parameters()
@@ -57,6 +57,7 @@ def test(model, test_loader, evaluator, exp_root, cfg, view, epoch, max_batches=
                 evaluator.add_prediction(img_idxs, lane_outputs.cpu().numpy(), t / images.shape[0])
             if view:
                 outputs, extra_outputs = outputs
+                print(outputs.shape)
                 preds = test_loader.dataset.draw_annotation(
                     idx,
                     pred=outputs[0].cpu().numpy(),

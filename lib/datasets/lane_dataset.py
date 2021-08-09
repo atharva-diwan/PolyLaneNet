@@ -134,6 +134,7 @@ class LaneDataset(Dataset):
         if pred is None:
             return img
 
+
         # Draw predictions
         pred = pred[pred[:, 0] != 0]  # filter invalid lanes
         matches, accs, _ = self.dataset.get_metrics(pred, idx)
