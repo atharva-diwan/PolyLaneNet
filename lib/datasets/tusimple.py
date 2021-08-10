@@ -11,7 +11,7 @@ from utils.metric import eval_json
 SPLIT_FILES = {
     'train+val': ['label_data_0313.json', 'label_data_0601.json', 'label_data_0531.json'],
     'train': ['label_data_0313.json', 'label_data_0601.json'],
-    'val': ['test_label.json'],
+    'val': ['label_data_0531.json'],
     'test': ['test_label.json'],
 }
 

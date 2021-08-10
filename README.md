@@ -23,7 +23,6 @@ The code requires Python 3, and has been tested on Python 3.5.2, but should work
 Install dependencies:
 ```
 pip install -r requirements.txt
-(install pytorch 1.4 and torchvision from https://pytorch.org/get-started/previous-versions/)
 ```
 
 <a name="usage"/>
