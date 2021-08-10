@@ -1,0 +1,124 @@
+[2021-08-10 15:59:56,184] [INFO] Experiment name: tusimple_fulltrain
+[2021-08-10 15:59:56,184] [INFO] Config:
+# Training settings
+seed: 0
+exps_dir: 'experiments'
+iter_log_interval: 1
+iter_time_window: 100
+model_save_interval: 1
+backup:
+model:
+  name: PolyRegression
+  parameters:
+    num_outputs: 35 # (5 lanes) * (1 conf + 2 (upper & lower) + 4 poly coeffs)
+    pretrained: true
+    backbone: 'efficientnet-b0'
+    pred_category: false
+    curriculum_steps: [0, 0, 0, 0]
+loss_parameters:
+  conf_weight: 1
+  lower_weight: 1
+  upper_weight: 1
+  cls_weight: 0
+  poly_weight: 300
+batch_size: 16
+epochs: 2695
+optimizer:
+  name: Adam
+  parameters:
+    lr: 3.0e-4
+lr_scheduler:
+  name: CosineAnnealingLR
+  parameters:
+    T_max: 385
+
+# Testing settings
+test_parameters:
+  conf_threshold: 0.5
+
+# Dataset settings
+datasets:
+  train:
+    type: LaneDataset
+    parameters:
+      dataset: tusimple
+      split: train+val
+      img_size: [360, 640]
+      normalize: true
+      aug_chance: 0.9090909090909091 # 10/11
+      augmentations:
+       - name: Affine
+         parameters:
+           rotate: !!python/tuple [-10, 10]
+       - name: HorizontalFlip
+         parameters:
+           p: 0.5
+       - name: CropToFixedSize
+         parameters:
+           width: 1152
+           height: 648
+      root: "../data_lane-regression/datasets/tusimple"
+
+  test: &test
+    type: LaneDataset
+    parameters:
+      dataset: nolabel_dataset
+      normalize: true
+      augmentations: []
+      img_h: 720 # The height of your test images (they shoud all have the same size)
+      img_w: 1280 # The width of your test images
+      img_size: [720, 1280]
+      max_lanes: 5 # Same number used in the pretrained model. If you use a model pretrained on TuSimple (most likely case), you'll use 5 here
+      root: "dataset/prediction" # Path to the directory containing your test images. The loader will look recursively for image files in this directory
+      img_ext: ".jpg"
+      split: val
+
+  # val = test
+  val:
+    <<: *test
+
+[2021-08-10 15:59:56,184] [INFO] Args:
+Namespace(batch_size=1, cfg='experiments\\tusimple_fulltrain\\config.yaml', epoch=2695, exp_name='tusimple_fulltrain', view=True)
+[2021-08-10 16:00:01,891] [INFO] Code state:
+ Git hash: f20c9b5d3bc1b414790dce1feb3cf2064dc1fdd7
+
+*************
+Git diff:
+*************
+diff --git a/README.md b/README.md
+index b4af404..5ab66b5 100644
+--- a/README.md
++++ b/README.md
+@@ -23,6 +23,7 @@ The code requires Python 3, and has been tested on Python 3.5.2, but should work
+ Install dependencies:
+ ```
+ pip install -r requirements.txt
++(install pytorch 1.4 and torchvision from https://pytorch.org/get-started/previous-versions/)
+ ```
+ 
+ <a name="usage"/>
+diff --git a/requirements.txt b/requirements.txt
+index 5a328c1..c18b7c2 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,5 +1,4 @@
+ lxml==4.6.2
+-torchvision==0.5.0
+ xmljson==0.2.0
+ scipy==1.4.1
+ tabulate==0.8.6
+@@ -10,7 +9,6 @@ imgaug==0.4.0
+ tqdm==4.43.0
+ opencv_python==4.2.0.32
+ efficientnet_pytorch==0.6.3
+-torch==1.4.0
+ progressbar33==2.4
+ PyYAML==5.3.1
+ scikit-learn==0.21.3
+
+[2021-08-10 16:00:01,891] [INFO] Starting testing.
+[2021-08-10 16:00:05,179] [INFO] Testing iteration: 1/1
+[2021-08-10 16:00:17,056] [INFO] Testing time: 15.0646
+[2021-08-10 16:00:17,056] [INFO] conf: 6.4817, lower: nan, upper: nan, poly: nan, cls_loss: 0.0000
+[2021-08-10 16:00:17,064] [INFO] Mean test loss: nan
+[2021-08-10 16:00:17,066] [INFO] 

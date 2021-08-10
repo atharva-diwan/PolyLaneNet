@@ -23,6 +23,7 @@ The code requires Python 3, and has been tested on Python 3.5.2, but should work
 Install dependencies:
 ```
 pip install -r requirements.txt
+(install pytorch 1.4 and torchvision from https://pytorch.org/get-started/previous-versions/)
 ```
 
 <a name="usage"/>
@@ -159,6 +160,9 @@ Then, run:
 
 ```bash
 python test.py --exp_name $exp_name --cfg $exps_dir/$exp_name/config.yaml --epoch 2695
+(For prediction)
+python test.py --exp_name tusimple_fulltrain --cfg experiments\tusimple_fulltrain\config.yaml --epoch
+2695 --batch_size 1 --view
 ```
 Replacing `$exp_name` with the name of the directory you downloaded (the name of the experiment) and `$exps_dir` with the `exps_dir` value you defined inside the `config.yaml` file. The script will look for a directory named `$exps_dir/$exp_name/models` to load the model.
 
